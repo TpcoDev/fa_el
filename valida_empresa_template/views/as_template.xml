@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+  <data>
+    <!-- <template id="external_layout_foji" inherit_id="website_sale.address">
+      <xpath expr="//input[@name='field_required']" position="replace">
+        <input type="hidden" name="field_required" t-att-value="'phone,name,vat,company_name'" />
+      </xpath>
+    </template> -->
+    <template id="confirmation_foji" inherit_id="website_sale.confirmation">
+      <xpath expr="//div[@id='wrap']" position="replace">
+        <div id="wrap">
+          <t t-if="order.state != 'sale'">
+            <div class="container oe_website_sale">
+              <!-- <ul class="wizard pull-center hidden-xs">
+                <li t-att-class="step==10 and 'text-primary' or 'text-muted'" id="step10">
+               
+                  <a t-att-href="step_review_order and '/shop/cart' or '#'"
+                    t-att-class="step_review_order and 'text-success' or 'o_link_disable'">
+                    <span>Review Order</span>
+                  </a>
+                  <span class="chevron" />
+                </li>
+                <li t-att-class="(step==20 and 'text-primary') or 'text-muted'" id="step20">
+                
+                  <a t-att-href="step_billing and '/shop/checkout' or '#'"
+                    t-att-class="step_billing and 'text-success' or ('o_link_disable' + ('' if step == 20 else ' text-muted'))">
+                    <t t-set="website_sale_order" t-value="website.sale_get_order()" />
+                    <span>Billing</span>
+                    <t
+                      t-if="not website_sale_order or not website_sale_order.website_order_line or not website_sale_order.only_services">
+                      <span> &amp; Shipping</span></t>
+                    <span class="chevron" />
+                  </a>
+                </li>
+                <li t-att-class="(step==40 and 'text-primary') or 'text-muted'" id="step40">
+                  Payment<span class="chevron"></span>
+                </li>
+                <li class="text-primary" t-att-class="(step==50 and 'text-primary') or 'text-muted'" id="step50">
+                  Confirmation<span class="chevron"></span>
+                </li>
+
+              </ul> -->
+              <style>
+                .row {
+                  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                  font-weight: 300;
+                  font-size: 16px;
+                  color: #555;
+                  line-height: 1.6em;
+                  -webkit-font-smoothing: antialiased;
+                  font-family: Muli-Regular;
+                  box-sizing: border-box;
+                  margin: 0;
+                }
+                }
+
+                ul.wizard {
+                  padding: 0;
+                  margin-top: 20px;
+                  list-style: none outside none;
+                  -webkit-border-radius: 4px;
+                  -moz-border-radius: 4px;
+                  border-radius: 4px;
+                  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.065);
+                  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.065);
+                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.065);
+                }
+
+                .wizard-main-ul {
+                  box-shadow: none !important;
+                  width: 100%;
+                  display: block;
+                  margin: 0px auto;
+                  text-align: center;
+                  background: unset !important;
+                  position: relative;
+                }
+
+                ul.wizard li:first-child {
+                  padding-left: 15px;
+                  border-radius: 4px 0 0 4px;
+                }
+
+                ul.wizard li {
+                  border: 1px solid #d4d4d4;
+                  border-right-width: 0;
+                  position: relative;
+                  float: left;
+                  padding: 0 10px 0 20px;
+                  margin: 0;
+                  line-height: 38px;
+                  background: #fbfbfb;
+                }
+
+                .wizard-main-ul li {
+                  float: none !important;
+                  display: inline;
+                  border: 0 !important;
+                  background: none !important;
+                  padding: 10px 15px 10px 15px !important;
+                  line-height: unset !important;
+                }
+
+                .text-muted {
+                  color: #777777;
+                }
+
+                .wizard-main-ul .text-muted a {
+                  width: 30px;
+                  height: 30px;
+                  text-align: center;
+                  padding: 6px 0;
+                  background-color: #fff;
+                  border: 1px solid #ccc;
+                  font-size: 12px;
+                  line-height: 1.428571429;
+                  border-radius: 50% !important;
+                  display: inline-block;
+                }
+
+                .wizard-main-ul li .stepwizard-step p {
+                  margin-top: 10px;
+                }
+
+                .text-primary {
+                  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                  font-weight: 300;
+                  font-size: 16px;
+                  -webkit-font-smoothing: antialiased;
+                  font-family: Muli-Regular;
+                  list-style: none outside none;
+                  box-sizing: border-box;
+                  color: rgba(84, 84, 84, 0.8) !important;
+                  float: none !important;
+                  display: inline;
+                  border: 0 !important;
+                  background: none !important;
+                  padding: 10px 15px 10px 15px !important;
+                  line-height: unset !important;
+                  position: relative;
+                  margin: 0;
+                  right: 0px;
+                }
+
+                .stepwizard-step {
+                  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                  font-weight: 300;
+                  font-size: 16px;
+                  -webkit-font-smoothing: antialiased;
+                  font-family: Muli-Regular;
+                  list-style: none outside none;
+                  color: #777777;
+                  line-height: unset !important;
+                  box-sizing: border-box;
+                  display: table-cell;
+                  text-align: center;
+                  position: relative;
+                }
+
+                .text-success {
+                  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                  font-weight: 300;
+                  -webkit-font-smoothing: antialiased;
+                  font-family: Muli-Regular;
+                  list-style: none outside none;
+                  box-sizing: border-box;
+                  text-decoration: none;
+                  transition: color 0.1s ease-in, background 0.1s ease-in;
+                  cursor: pointer;
+                  color: #3c763d;
+                  width: 30px;
+                  height: 30px;
+                  text-align: center;
+                  padding: 6px 0;
+                  background-color: #fff;
+                  border: 1px solid #ccc;
+                  font-size: 12px;
+                  line-height: 1.428571429;
+                  border-radius: 50% !important;
+                  display: inline-block;
+                }
+
+                .step_no {
+                  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                  font-weight: 300;
+                  -webkit-font-smoothing: antialiased;
+                  font-family: Muli-Regular;
+                  list-style: none outside none;
+                  box-sizing: border-box;
+                  text-decoration: none;
+                  transition: color 0.1s ease-in, background 0.1s ease-in;
+                  cursor: pointer;
+                  width: 30px;
+                  height: 30px;
+                  text-align: center;
+                  padding: 6px 0;
+                  background-color: #ec821e !important;
+                  font-size: 12px;
+                  line-height: 1.428571429;
+                  border-radius: 50% !important;
+                  display: inline-block;
+                  color: white !important;
+                }
+
+                .chevron {
+                  position: absolute !important;
+                  top: 0 !important;
+                  right: -10px !important;
+                  z-index: 1 !important;
+                  display: block !important;
+                  border: 20px solid transparent !important;
+                  border-right: 0 !important;
+                  border-left: 10px solid #d4d4d4 !important;
+                }
+                .wizard-main-ul:before {
+                    top: 14px;
+                    bottom: 0;
+                    position: absolute;
+                    content: " ";
+                    width: 50%;
+                    height: 1px;
+                    background-color: #ccc;
+                    z-order: 0;
+                    left: 25%;
+                }
+              </style>
+              <div class="row">
+                <ul class="wizard pull-right hidden-xs wizard-main-ul">
+                  <li id="step10" class="text-muted">
+
+                    <div class="stepwizard-step">
+                      <a data-oe-model="ir.ui.view" data-oe-id="1875" data-oe-xpath="/data/xpath[2]/li/div[1]/a[1]"
+                        data-oe-field="arch" href="/shop/cart" class="text-success">1</a>
+                      <p data-oe-model="ir.ui.view" data-oe-id="1875" data-oe-xpath="/data/xpath[2]/li/div[1]/p[1]"
+                        data-oe-field="arch">Revisar orden</p>
+                      <!-- <span class="chevron"></span> -->
+                    </div>
+                  </li>
+                  <li id="step20" class="text-muted">
+
+                    <div class="stepwizard-step">
+                      <a data-oe-model="ir.ui.view" data-oe-id="1875" data-oe-xpath="/data/xpath[3]/li/div[1]/a[1]"
+                        data-oe-field="arch" href="/shop/checkout" class="text-success">2</a>
+                      <p>
+                        <span data-oe-model="ir.ui.view" data-oe-id="1875"
+                          data-oe-xpath="/data/xpath[3]/li/div[1]/p[1]/span[1]" data-oe-field="arch">Datos para</span>
+                        <span data-oe-model="ir.ui.view" data-oe-id="1875"
+                          data-oe-xpath="/data/xpath[3]/li/div[1]/p[1]/t[2]/span[1]" data-oe-field="arch">
+                          Envío</span>
+                        <!-- <span class="chevron" data-oe-model="ir.ui.view" data-oe-id="1875" -->
+                        <span  data-oe-model="ir.ui.view" data-oe-id="1875"
+                          data-oe-xpath="/data/xpath[3]/li/div[1]/p[1]/span[2]" data-oe-field="arch"></span>
+                      </p>
+                    </div>
+                  </li>
+                  <li id="step40" data-oe-id="1875" data-oe-xpath="/data/xpath[4]/li" data-oe-model="ir.ui.view"
+                    data-oe-field="arch" class="text-muted">
+                    <div class="stepwizard-step">
+                      <a class="text-success">3</a>
+                      <p>Confirmar productos a cotizar</p>
+                      <!-- <span class="chevron"></span> -->
+                    </div>
+                  </li>
+                  <li id="step50" data-oe-id="1875" data-oe-xpath="/data/xpath[5]/li" data-oe-model="ir.ui.view"
+                    data-oe-field="arch" class="text-primary">
+                    <div class="stepwizard-step">
+                      <a class="step_no">4</a>
+                      <p>Cotización Solicitada</p>
+                      <!-- <span class="chevron"></span> -->
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="oe_cart">
+                    <br />
+                    <br />
+                    <div t-if="request.params.get('message',False)" class="alert alert-success">
+                      <t t-esc="request.params.get('message',False)" />
+                    </div>
+                    <div t-if="request.params.get('warning',False)" class="alert alert-danger">
+                      <t t-esc="request.params.get('warning',False)" />
+                    </div>
+                    <div t-if="not website_sale_order or not website_sale_order.website_order_line"
+                      class="js_cart_lines well well-lg">
+                      Tu Carrito es Vacio!
+                    </div>
+                    <a href="/shop" class="btn btn-default mb32">
+                      <span class="fa fa-long-arrow-left" />
+                      <span class="hidden-xs">Continuar compra</span>
+                      <span class="visible-xs-inline">Continuar</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </t>
+          <t t-if="order.state == 'sale'">
+            <div class="container oe_website_sale">
+              <div class="row">
+                <div class="col-md-9">
+                  <h1 class="mb32"><span>Order</span> <em t-field="order.name" />
+                    <t t-if="order.state == 'sale'"><span>Confirmed</span></t>
+                  </h1>
+                  <div class="thanks_msg">
+                    <h2>Thank you for your order.
+                      <a class="btn btn-primary pull-right hidden-xs" href="/shop/print" target="_blank"><i
+                          class="fa fa-print"></i> Print</a>
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="oe_cart">
+                    <h3 class="mt32 text-left">
+                      <strong>Order Details:</strong>
+                    </h3>
+                    <table class="table table-striped table-condensed">
+                      <thead>
+                        <tr>
+                          <th class='td-product_name'>Product</th>
+                          <th class='td-qty'>Quantity</th>
+                          <th class="text-right td-price">Unit Price</th>
+                          <th class="text-right td-price-total">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr t-foreach="order.order_line" t-as="line">
+                          <td class='td-product_name'>
+                            <div>
+                              <a t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
+                                <strong t-esc="line.product_id.with_context(display_default_code=False).display_name" />
+                              </a>
+                            </div>
+                            <div class="text-muted hidden-xs small">
+                              <t t-foreach="line.name.splitlines()[1:]" t-as="name_line">
+                                <span>
+                                  <t t-esc="name_line" /></span><br />
+                              </t>
+                            </div>
+                          </td>
+                          <td class='td-qty'>
+                            <div id="quote_qty">
+                              <span
+                                t-esc="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" />
+                              <span class='hidden-xs' t-field="line.product_uom" groups="product.group_uom" />
+                            </div>
+                          </td>
+                          <td class='td-price'>
+                            <span class="text-right">
+                              <div t-field="line.price_unit"
+                                t-options='{"widget": "monetary", "display_currency": order.pricelist_id.currency_id}' />
+                            </span>
+                          </td>
+                          <td class='td-price-total'>
+                            <div class="text-right" t-field="line.price_subtotal"
+                              t-options='{"widget": "monetary", "display_currency": order.pricelist_id.currency_id}' />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <table class='table'>
+                      <tr>
+                        <td class="col-md-8"></td>
+                        <td class="text-right-not-xs text-left-xs col-sm-2 col-xs-3">Subtotal:</td>
+                        <td class="text-right col-sm-2 col-xs-3">
+                          <span t-field="order.amount_untaxed" style="white-space: nowrap;"
+                            t-options="{'widget': 'monetary','from_currency': order.pricelist_id.currency_id,'display_currency': website.currency_id}" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class='noborder'></td>
+                        <td class="text-right noborder">Taxes:</td>
+                        <td class="text-right-not-xs text-left-xs noborder">
+                          <span t-field="order.amount_tax" style="white-space: nowrap;"
+                            t-options="{'widget': 'monetary', 'from_currency': order.pricelist_id.currency_id, 'display_currency': website.currency_id}" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class='noborder'></td>
+                        <td class="text-right"><strong>Total:</strong></td>
+                        <td class="text-right-not-xs text-left-xs">
+                          <strong t-field="order.amount_total"
+                            t-options='{"widget": "monetary", "display_currency": order.pricelist_id.currency_id}' />
+                        </td>
+                      </tr>
+                    </table>
+                    <div class="clearfix" />
+                    <div class="oe_structure" />
+                    <h3 class="text-left">
+                      <strong>Payment Information:</strong>
+                    </h3>
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <td colspan="2">
+                            <t t-esc="order.payment_acquirer_id.name" />
+                          </td>
+                          <td class="text-right" width="100">
+                            <strong>Total:</strong>
+                          </td>
+                          <td class="text-right" width="100">
+                            <strong t-field="order.amount_total"
+                              t-options="{'widget': 'monetary', 'display_currency': order.pricelist_id.currency_id}" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <t t-call="website_sale.payment_confirmation_status" />
+                    <t
+                      t-if="request.env['ir.config_parameter'].sudo().get_param('auth_signup.allow_uninvited') == 'True' and request.website.is_public_user()">
+                      <p class='alert alert-info mt16'>
+                        <a t-att-href='order.partner_id.signup_prepare() and order.partner_id.signup_url'
+                          class='btn btn-primary'>Sign Up</a>
+                        Now to Follow Your Order
+                      </p>
+                    </t>
+                  </div>
+                </div>
+                <div class="col-md-3 hidden-sm hidden-xs text-muted">
+                  <h3 class='mt32'>&amp;nbsp;</h3>
+                  <t t-call='website_sale.bill_to'>
+                    <t t-set="order" t-value="order" />
+                  </t>
+                </div>
+              </div>
+            </div>
+            <div class="oe_structure" />
+          </t>
+        </div>
+      </xpath>
+    </template>
+
+  </data>
+</odoo>
