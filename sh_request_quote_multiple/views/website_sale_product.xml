@@ -31,7 +31,9 @@
    		
    		<!--  Cart Lines -->
    		<template id="sh_request_quote_multi_product_cart_lines" inherit_id="website_sale.cart_lines" name="Request for Quote multi Product Shopping Cart Lines">
+		  
 			<xpath expr="//div[hasclass('js_cart_lines')]" position="before">
+
 	  			<div t-if="request.params.get('message',False)" class="alert alert-success">
 		           <t t-esc="request.params.get('message',False)"/>
 		        </div>
@@ -106,6 +108,7 @@
    				 t-att-style="'display:block;' if show_payment == 1 else 'display:none;'">
                     <span class="">Process Checkout</span>
                     <span class="fa fa-chevron-right" />
+					<t t-set="step" t-value="50"/>
                 </a>
                  <a role="button" id="a_submit_for_quote" t-if="not optional_products and website_sale_order and website_sale_order.website_order_line" 
    				 class="btn btn-primary pull-right mb32 mr8" href="/shop/checkout"
