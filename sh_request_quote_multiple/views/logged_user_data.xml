@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<!-- logged_user FORM VIEW -->
+	<record id="sh_logged_user_form_view" model="ir.ui.view">
+		<field name="name">sh.logged.user.data.form.view</field>
+		<field name="model">logged.user.data</field>
+		<field name="arch" type="xml">
+			<form string="Logged User Data" create="0" edit="0">
+				<sheet>
+					<group>
+						<group>
+							<field name="ip_address" />
+							<field name="date" />
+							<field name="partner_id" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<!-- Logged user TREE VIEW -->
+	<record id="sh_logged_user_tree_view" model="ir.ui.view">
+		<field name="name">sh.logged.user.data.tree.view</field>
+		<field name="model">logged.user.data</field>
+		<field name="arch" type="xml">
+			<tree string="Logged User Data" create="0" edit="0">
+				<field name="ip_address" />
+				<field name="date" />
+				<field name="partner_id" />
+			</tree>
+		</field>
+	</record>
+		<!-- logged_user ACTION -->
+		<record id="sh_logged_user_action" model="ir.actions.act_window">
+			<field name="name">Logged User Data</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">logged.user.data</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+	
+	<!-- Settings Menu -->
+	<menuitem id="sh_logged_user_data_menu"
+		action="sh_logged_user_action"
+		name="Logged User Data" 
+		parent="website.menu_website_global_configuration" sequence="100" />
+</odoo>

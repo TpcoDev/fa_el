@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+		<record id="sh_res_config_ecommerce_settings_inherit" model="ir.ui.view">
+			<field name="name">sh.res.config.ecommerce.settings.inherit</field>
+			<field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="website_sale.res_config_settings_view_form"/>
+			<field name="arch" type="xml">
+			
+				<xpath expr="//div//div[@id='sale_product_catalog_settings']" position="after">
+				
+  				<h2>Enable Spam Protection</h2>  				
+			        <div class="row mt16 o_settings_container">			        
+	                    <div class="col-xs-6 col-md-6 o_setting_box" >
+	                        <div class="o_setting_left_pane">
+	                        	<field name="enable_spam_protection"/>                            
+	                        </div>
+	                        <div class="o_setting_right_pane">
+	                            <label for="enable_spam_protection"/>
+	                            <div class="text-muted">
+	                              Enable Spam Protection
+	                            </div>
+	                        </div>
+	                    </div>
+	                <div class="col-xs-6 col-md-6 o_setting_box" ></div>
+	                		        
+	                    <div class="col-xs-6 col-md-6 o_setting_box" attrs="{'invisible':[('enable_spam_protection','=', False)]}">
+	                        <div class="o_setting_right_pane">
+	                            <div class="content-group">
+	                                <div class="row mt16">
+	                                    <label class="o_light_label col-lg-8" for="max_quotation_logged_user"/>
+	                                    <field name="max_quotation_logged_user" style="width:10%" />
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                     <div class="col-xs-6 col-md-6 o_setting_box" attrs="{'invisible':[('enable_spam_protection','=', False)]}">
+	                        <div class="o_setting_right_pane">
+	                            <div class="content-group">
+	                                <div class="row mt16">
+	                                    <label class="o_light_label col-lg-8" for="max_quotation_public_user"/>
+	                                    <field name="max_quotation_public_user" style="width:10%" />
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                	
+	                </div>        
+				</xpath>				
+			</field> 
+		</record>
+	</data>
+</odoo>
+                    

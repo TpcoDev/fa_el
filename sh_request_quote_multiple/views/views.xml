@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+	<!--  Add RFQ field in product -->
+	   <record id="sh_product_template_request_for_quotation_multi_form_view_inherit" model="ir.ui.view">
+			<field name="name">product.template.request.for.quotation.form</field>
+			<field name="model">product.template</field>
+ 			<field name="inherit_id" ref="website_sale.product_template_form_view"/> 
+ 			<field name="arch" type="xml">
+				<field name="website_style_ids" position="after">
+					<field name="request_for_quotation"/>			
+				</field>
+	 		</field>
+		</record>
+		<!--  Add RFQ field in sale order -->
+	   <record id="sh_sale_request_for_quotation_multi_form_view_inherit" model="ir.ui.view">
+			<field name="name">sh.sale.order.form.view.inh</field>
+			<field name="model">sale.order</field>
+ 			<field name="inherit_id" ref="sale.view_order_form"/> 
+ 			<field name="arch" type="xml">
+				<field name="partner_id" position="after">
+					<field name="request_for_quotation" invisible="1"/>			
+				</field>
+	 		</field>
+		</record>
+		<!--  Add RFQ filter in order -->
+		<record id="sh_sale_order_search_view_inherit" model="ir.ui.view">
+			<field name="name">sh.sale.order.list.select.inherit</field>
+			<field name="model">sale.order</field>
+ 			<field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/> 
+ 			<field name="arch" type="xml">
+ 				<xpath expr="//filter[@name='sales']" position="after">
+ 					<field name="request_for_quotation"/>
+ 					 <separator/>
+ 					<filter string="Request for Quotation" name="rfq_pos"
+                        domain="[('request_for_quotation', '=', True)]"/>
+ 				</xpath>
+ 			</field>
+ 		</record>
+ 		<record id="sh_quote_search_view_inherit" model="ir.ui.view">
+			<field name="name">sh.quote.list.select.inherit</field>
+			<field name="model">sale.order</field>
+ 			<field name="inherit_id" ref="sale.sale_order_view_search_inherit_sale"/> 
+ 			<field name="arch" type="xml">
+ 				<xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+ 					<field name="request_for_quotation"/>
+ 					<filter string="Request for Quotation" name="rfq_pos"
+                        domain="[('request_for_quotation', '=', True)]"/>
+ 				</xpath>
+ 			</field>
+ 		</record>
+ 		<!--  RFQ Menu and Action -->
+ 		<record id="action_pos_request_for_quotation" model="ir.actions.act_window">
+            <field name="name">Request For Quotation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+            <field name="search_view_id" ref="sale.sale_order_view_search_inherit_sale"/>
+            <field name="context">{}</field>
+            <field name="domain">[('request_for_quotation', '=', True)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new RFQ, the first step of a new sale!
+                </p>
+            </field>
+        </record>
+ 		 <menuitem id="menu_request_for_quotation"
+            name="Request For Quotation"
+            action="action_pos_request_for_quotation"
+            parent="sale.sale_order_menu"
+            sequence="2" groups="sales_team.group_sale_salesman"/>
+            
+	</data>
+ </odoo>	

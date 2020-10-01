@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+	<data>	
+	
+		<!-- Price Template -->  	
+		<template id="sh_request_quote_website_sales_template_multi_product_price_inherit" inherit_id="website_sale.product_price" name="Request for Quote Hide multi Product price">
+ 			<xpath expr="//div[hasclass('product_price','mt16')]" position="attributes">
+  				<attribute name="t-if">product.request_for_quotation == false</attribute>			
+  			</xpath>
+  		</template>
+  		<!-- Price on shop page -->
+ 		<template id="sh_request_quote_multi_product_item" inherit_id="website_sale.products_item" name="Request for Quote multi Product Item">
+			<xpath expr="//div[hasclass('product_price')]/b/span" position="attributes">
+   				<attribute name="t-if">product.request_for_quotation == false</attribute>			
+  			</xpath>
+   		</template> 
+   		
+   		<!-- Product Detail Page -->
+   		<template id="sh_request_quote_website_sales_template_multi_product_detail_inherit" inherit_id="website_sale.product" name="Request for Quote multi Product price Detail">
+   			<xpath expr="//div[hasclass('js_product')]/a[@id='add_to_cart']" position="replace">
+   				<t t-if="product.request_for_quotation == false">
+   					<a role="button" id="add_to_cart" class="btn btn-primary btn-lg mt16 js_check_product a-submit d-block d-sm-inline-block" 
+                                    href="#"><i class="fa fa-shopping-cart"/> Add to Cart</a>
+   				</t>
+   				<t t-if="product.request_for_quotation == True">
+   					<a role="button" id="add_to_cart" class="btn btn-primary btn-lg mt16 js_check_product a-submit d-block d-sm-inline-block" 
+                                    href="#"><i class="fa fa-shopping-cart"/> Add to Quote</a>
+   				</t>
+  			</xpath>
+   		</template>
+   		
+   		<!--  Cart Lines -->
+   		<template id="sh_request_quote_multi_product_cart_lines" inherit_id="website_sale.cart_lines" name="Request for Quote multi Product Shopping Cart Lines">
+			<xpath expr="//div[hasclass('js_cart_lines')]" position="before">
+	  			<div t-if="request.params.get('message',False)" class="alert alert-success">
+		           <t t-esc="request.params.get('message',False)"/>
+		        </div>
+		        <div t-if="request.params.get('warning',False)" class="alert alert-danger">
+		           <t t-esc="request.params.get('warning',False)"/>
+		        </div>
+			</xpath> 
+			<xpath expr="//table[hasclass('js_cart_lines')]/tbody/t/tr/td[hasclass('td-price')]" position="replace">
+			
+					 <td class="text-center td-price" name="price" t-if="line.product_id.request_for_quotation == false" >
+                            <t t-if="(compute_currency(line.product_id.lst_price) - line.price_reduce ) &gt; 0.01  and website.get_current_pricelist().discount_policy=='without_discount'">
+                                <del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="compute_currency(line.product_id.website_public_price)" t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}" />
+                            </t>
+                            <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_subtotal" />
+                            <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_total" />
+                        </td>
+                            
+					
+					<td class="text-center td-price" name="price" t-if="line.product_id.request_for_quotation == True">
+                         RFQ
+                    </td>
+  			</xpath>
+   		</template> 
+    
+		
+   		<!--  Suggested LIST -->
+   		<template id="sh_request_quote_website_sales_suggested_products_list_inherit" inherit_id="website_sale.suggested_products_list" name="Request for Quote multi Product Suggested Product list">
+   			<xpath expr="//table/tbody/tr/td[4]" position="replace">
+   				<t t-if="product.request_for_quotation == True">
+   					<td class="w-25 text-center">
+                        <input class="js_quantity" name="product_id" t-att-data-product-id="product.id" type="hidden" />
+                        <a role="button" class="btn btn-link js_add_suggested_products">
+                            <strong>Add to Quote</strong>
+                        </a>
+                    </td>
+   				</t>
+   				<t t-if="product.request_for_quotation == False">
+   					<td class="w-25 text-center">
+                        <input class="js_quantity" name="product_id" t-att-data-product-id="product.id" type="hidden" />
+                        <a role="button" class="btn btn-link js_add_suggested_products">
+                            <strong>Add to Cart</strong>
+                        </a>
+                    </td>
+   				</t>
+  			</xpath>
+   			<xpath expr="//table/tbody/tr/td[3]" position="attributes">
+   				<attribute name="t-if">product.request_for_quotation == false</attribute>
+  			</xpath>
+   		</template>
+   		
+   		<!--  Process checkout template  -->
+   		<template id="sh_request_quote_website_sales_cart_inherit" inherit_id="website_sale.cart" name="Request for Quote multi Product Cart Inherit">
+   			
+   			<xpath expr="//div[hasclass('oe_cart')]/div/div/a[hasclass('mr8')]" position="replace">
+   				<t t-set="show_submit_rfq" t-value="0"/>
+   				<t t-set="show_payment" t-value="0"/>
+   				<t t-if="website_sale_order and website_sale_order.website_order_line">
+   					<t t-set="show_submit_rfq" t-value="1"/>
+   					<t t-set="show_payment" t-value="1"/>
+   					<t t-foreach="website_sale_order.website_order_line" t-as="order_line">
+						<t t-if="order_line.product_id.request_for_quotation == false">
+							<t t-set="show_submit_rfq" t-value="0"/>
+						</t>
+						<t t-if="order_line.product_id.request_for_quotation == True">
+							<t t-set="show_payment" t-value="0"/>
+						</t>
+   					</t>
+   				</t>
+   		
+   				 <a role="button" id="a_proceed_checkout" t-if="not optional_products and website_sale_order and website_sale_order.website_order_line" 
+   				 class="btn btn-primary pull-right mb32 mr8" href="/shop/checkout"
+   				 t-att-style="'display:block;' if show_payment == 1 else 'display:none;'">
+                    <span class="">Process Checkout</span>
+                    <span class="fa fa-chevron-right" />
+                </a>
+                 <a role="button" id="a_submit_for_quote" t-if="not optional_products and website_sale_order and website_sale_order.website_order_line" 
+   				 class="btn btn-primary pull-right mb32 mr8" href="/shop/checkout"
+   				 t-att-style="'display:block;' if show_submit_rfq == 1 else 'display:none;'">
+                    <span class="">Submit for Quotation</span>
+                    <span class="fa fa-chevron-right" />
+                </a>
+                
+   				<div t-if="website_sale_order and website_sale_order.website_order_line" class="both_product_alert alert alert-danger"
+   				t-att-style="'display:block;' if show_payment == 0 and show_submit_rfq ==0 else 'display:none;'">
+		           You can not proceed order with both RFQ and Price Products, Please either remove RFQ Products or Price Products to enable next step.
+		        </div>
+   			</xpath>
+   		</template>
+   		
+   		<!--  payment Template  -->
+   		<template id="sh_request_quote_website_payment_inherit" inherit_id="payment.payment_tokens_list" name="RFQ Payment">
+   			<xpath expr="//form/div[hasclass('pull-right')]" position="replace">
+   					
+   					<div class="pull-right" t-if="website_sale_order and not website_sale_order.website_order_line.filtered(lambda c: c.product_id.request_for_quotation==False)">
+		                <a role="button" id="submit_for_quote" class="btn btn-primary float-right" href="#" >
+	                    <span class="">Submit for Quotation</span>
+	                    <span class="fa fa-chevron-right" /></a>
+	            	</div>
+	            	
+	            	<div class="pull-right" t-if="website_sale_order and not website_sale_order.website_order_line.filtered(lambda c: c.product_id.request_for_quotation==True)">
+		                <button t-if="mode == 'payment'" id="o_payment_form_pay" type="submit" t-att-class="submit_class if submit_class else 'btn btn-primary btn-lg mb8 mt8'">
+		                    <t t-if="submit_txt">
+		                        <i t-if="icon_class" t-attf-class="fa {{icon_class}}"/>
+		                        <t t-esc="submit_txt"/>
+		                    </t>
+		                    <t t-else="">
+		                        <i class="fa fa-lock"> Pay</i>
+		                    </t>
+		                </button>
+		                <button t-if="mode == 'manage' and s2s_acquirers" id="o_payment_form_add_pm" class="btn btn-primary btn-lg mb8 mt8">
+		                    <i class="fa fa-plus-circle"> Add new card</i>
+		                </button>
+		            </div>
+            
+	            	
+   			</xpath>
+   			<xpath expr="//form/div[hasclass('panel-default')]" position="attributes">
+   				<attribute name="t-if">website_sale_order and not website_sale_order.website_order_line.filtered(lambda c: c.product_id.request_for_quotation==True)</attribute>
+   			</xpath>
+   		</template>
+   		 <template id="sh_request_quote_website_payment_template_inherit" inherit_id="website_sale.payment" name="RFQ website Payment">
+   			 <xpath expr="//div[hasclass('oe_cart')]/div/div/table[@id='cart_products']/tbody/tr/td[5]" position="replace">
+  				 <td class="text-center td-price" t-if="website_sale_order and not website_sale_order.website_order_line.filtered(lambda c: c.product_id.request_for_quotation==True)">
+                      <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_subtotal" />
+                      <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_total" />
+                    </td>
+  			
+	        		<td class="text-center td-price" t-if="website_sale_order and not website_sale_order.website_order_line.filtered(lambda c: c.product_id.request_for_quotation==False)">
+                      RFQ
+                  </td>
+	        </xpath>
+   			<xpath expr="//div[hasclass('oe_cart')]/div/div[@id='payment_method']/h3" position="attributes">
+   				<attribute name="t-if">website_sale_order and not website_sale_order.website_order_line.filtered(lambda c: c.product_id.request_for_quotation==True)</attribute>
+   			</xpath>
+   		</template> 
+   		<!--  Order Total Template  -->
+   		<template id="rfq_website_order_total" inherit_id="website_sale.total" name="Total Order RFQ">
+   				<xpath expr="//div[@id='cart_total']/div[@id='order_total_untaxed']" position="replace">
+	   				 <div class="row" id="order_total_untaxed">
+		                <span class="col-xs-6 text-right text-muted">Subtotal:</span>
+		                <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+		                    <span t-esc="website_sale_order.get_amount_untaxed()" style="white-space: nowrap;"
+		                     t-options="{'widget': 'monetary','from_currency': website_sale_order.pricelist_id.currency_id,'display_currency': website.currency_id}" />
+		                </span>
+		            </div>
+   				</xpath>
+   				<xpath expr="//div[@id='cart_total']/div[@id='order_total_taxes']" position="replace">
+   						 <div class="row" id="order_total_taxes">
+			                <span class="col-xs-6 text-right text-muted" title="Taxes may be updated after providing shipping address"> Taxes:</span>
+			                <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+			                    <span t-esc="website_sale_order.get_amount_tax()" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" />
+			                </span>
+			            </div>
+   				</xpath>
+   				<xpath expr="//div[@id='cart_total']/div[@id='order_total']" position="replace">
+   				
+   					<div class="row" id="order_total">
+		                <hr class="mt8 mb0"/>
+		                <span class="col-xs-6 text-right h4 mt0">Total:</span>
+		                <span class="col-xs-6 text-right-not-xs text-left-xs h4 mt0" style="white-space: nowrap;">
+		                    <span t-esc="website_sale_order.get_amount_total()" style="white-space: nowrap;" t-options="{'widget': 'monetary','from_currency': website_sale_order.pricelist_id.currency_id,'display_currency': website.currency_id}" />
+		                </span>
+		            </div>
+   				</xpath>
+   		</template>
+   		
+  	</data>
+</odoo>
