@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-	<data>
-      <template id="external_layout_foji" inherit_id="website_sale.address">
+  <data>
+    <template id="external_layout_foji" inherit_id="website_sale.address">
       <xpath expr="//input[@name='field_required']" position="replace">
         <input type="hidden" name="field_required" t-att-value="'phone,name,vat,company_name'" />
       </xpath>
-      </template>
-	  
-
-	</data>
+    </template>
+  
+  </data>
 </odoo>

@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Ahorasoft TPCO Project",
+    'name': "TPCO Project Web",
     'category': 'TPCO',
-    'version': '1.0.0',
-    'author': "Ahorasoft",
-    'website': 'http://www.ahorasoft.com',
-    "support": "soporte@ahorasoft.com",
+    'version': '1.0.1',
+    'author': "tpco",
+    'website': 'www.tpco.cl',
+    "support": "tpco@tpco.cl",
     'summary': """
-        Ahorasoft TPCO Project""",
+        TPCO Project""",
     'description': """
-        Ahorasoft TPCO Project
+        TPCO Project
     """,
     "images": [],
     "depends": [
